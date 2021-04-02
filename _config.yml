@@ -6,14 +6,14 @@ highlighter:      rouge
 permalink:        pretty
 
 # Setup
-title:            Finn Sinclair
-tagline:          'VR/AR, embedded development, music, and more.'
-description:      'Studying computer engineering, with a flair for design, human-computer interaction, and human centered design.'
-url:              https://zee2.github.io/
+title:            Ming Jie See
+tagline:          'Machine Learning, Embedded Systems, FPGAs.'
+description:      'Maker, engineer, tinkerer. Enjoy working with tech and pushing the envelope.'
+url:              https://jeremysee2.github.io/
 baseurl:          /
 
 author:
-  name:           'Finn Sinclair'
+  name:           'Ming Jie See'
 
 gem: [jekyll-paginate, jekyll-gists]
 
@@ -25,4 +25,4 @@ paginate:         10
 version:          2.1.0
 
 github:
-  repo:           https://github.com/Zee2/zee2.github.io
+  repo:           https://github.com/jeremysee2/jeremysee2.github.io
