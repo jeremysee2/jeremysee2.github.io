@@ -5,7 +5,7 @@ title: Aegle - EHR Modernisation Layer
 ---
 ## Aegle - EHR Modernisation Layer
 
-At Hack Cambridge 2020 hackathon, my team and I designed a proof of concept for an OCR abstraction layer to bridge legacy Electronic Health Record (EHR) management systems. The app scans EHR webpages or hardcopy images, uses Microsoft Azure’s OCR API to detect key information such as the patient’s name and doctor’s remarks, then stores them in a database. The application was implemented in C#, the database was hosted on Azure. 
+At Hack Cambridge 2020 hackathon, my team and I designed a proof of concept for an OCR abstraction layer to bridge legacy Electronic Health Record (EHR) management systems. The app scans EHR webpages or hardcopy images, uses Microsoft Azure’s OCR API to detect key information such as the patient’s name and doctor’s remarks, then stores them in a database. The application was implemented in C#, the database was hosted on Azure.
 
 {{< youtube kjvqHetWXMc>}}
 
