@@ -1,0 +1,28 @@
+# Dependencies
+markdown:         kramdown
+highlighter:      rouge
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Finn Sinclair
+tagline:          'VR/AR, embedded development, music, and more.'
+description:      'Studying computer engineering, with a flair for design, human-computer interaction, and human centered design.'
+url:              https://zee2.github.io/
+baseurl:          /
+
+author:
+  name:           'Finn Sinclair'
+
+gem: [jekyll-paginate, jekyll-gists]
+
+plugins:
+  - jekyll-paginate
+paginate:         10
+
+# Custom vars
+version:          2.1.0
+
+github:
+  repo:           https://github.com/Zee2/zee2.github.io
