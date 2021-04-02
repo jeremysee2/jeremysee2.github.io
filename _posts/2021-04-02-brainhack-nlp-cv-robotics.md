@@ -5,7 +5,7 @@ title: Brainhack - NLP and CV in Robotics
 ---
 ## DSTA Brainhack 2020: NLP/CV in Robotics
 
-I engineered a cooperative robotics platform where a drone flies to a designated point to take a photo of the arena and plot a course around the obstacles for the ground robot using OpenCV. The robot would then use dead reckoning to navigate the course. In the second stage, we trained a Natural Language Processing (NLP) model to identify a doll based on its description and a Computer Vision (CV) model using [YoloV3](https://github.com/ultralytics/yolov3) in PyTorch to identify said doll in the arena. Once identified, the robot would pick up the doll with its grabber and score points for the competition. My team and I placed 4th overall. 
+I engineered a cooperative robotics platform where a drone flies to a designated point to take a photo of the arena and plot a course around the obstacles for the ground robot using OpenCV. The robot would then use dead reckoning to navigate the course. In the second stage, we trained a Natural Language Processing (NLP) model to identify a doll based on its description and a Computer Vision (CV) model using [YoloV3](https://github.com/ultralytics/yolov3) in PyTorch to identify said doll in the arena. Once identified, the robot would pick up the doll with its grabber and score points for the competition. My team and I placed 4th overall.
 
 ![robot we used](/uploads/dji-robomaster.png)
 
