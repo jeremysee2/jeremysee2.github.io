@@ -36,6 +36,10 @@ To illustrate the differences between an FPGA and an embedded microcontroller, i
 
 In this tutorial, we will control a seven segment display using the FPGA. This will introduce concepts such as `module` where code can be written and reused, a similar paradigm to Object Oriented Programming.
 
+### Tutorial 2: UART Interface
+
+### Tutorial 3: VGA Interface
+
 ### References
 
 For this tutorial I referenced the following sources:
