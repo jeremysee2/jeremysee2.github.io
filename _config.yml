@@ -11,6 +11,7 @@ tagline:          'Machine Learning, Embedded Systems, FPGAs.'
 description:      'Maker, engineer, tinkerer. Enjoy working with tech and pushing the envelope.'
 url:              https://jeremysee2.github.io/
 baseurl:          /
+repository:       jeremysee2/jeremysee4.github.io
 
 author:
   name:           'Ming Jie See'
