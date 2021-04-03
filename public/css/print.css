@@ -1,0 +1,134 @@
+
+
+@media (min-width: 20em) {
+    .row {
+        flex-direction: column;
+    }
+}
+
+
+@media (min-width: 58em) {
+    .row {
+        flex-direction: row;
+    }
+}
+
+.content-wrapper img {
+    margin: auto;
+    max-width: 100%;
+    margin-bottom: 1em;
+    border-radius: 10px;
+    box-shadow: 2px 2px 40px rgba(0,0,0,0.15);
+}
+
+.content-wrapper video {
+    margin: auto;
+    max-width: 100%;
+    display: block;
+    margin-bottom: 1em;
+    border-radius: 10px;
+    box-shadow: 2px 2px 40px rgba(0,0,0,0.15);
+}
+
+.dots-maxheight {
+    height: fit-content;
+}
+
+.dots-maxheight-centered {
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-fx {
+    border-radius: 0px;
+    box-shadow: unset;
+}
+
+.date-header-thing {
+    display: -webkit-box;   
+	display: -moz-box; 
+	display: -ms-flexbox;  
+	display: -webkit-flex;
+    display: flex;
+    
+    margin-bottom: 1em;
+    
+    -webkit-justify-content: start;
+    -moz-justify-content: start;
+	justify-content: start;
+	-webkit-align-items: start;
+    -moz-align-items: start;
+	align-items: start;
+	-webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.date-header-thing * {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.date-header-thing span {
+    padding-left: 1.0em;
+}
+
+.social-media {
+    display: -webkit-box;   
+	display: -moz-box; 
+	display: -ms-flexbox;  
+	display: -webkit-flex;
+    display: flex;
+
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    
+	-webkit-align-items: center;
+    -moz-align-items: center;
+    align-items: center;
+}
+
+.social-media-item {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+.social-media-item img {
+    min-width: 1.8em;
+    min-height: 1.8em;
+    margin: auto;
+}
+
+@media (min-width: 48em) {
+    .social-media-item img {
+        min-width: 1.3em;
+        min-height: 1.3em;
+        margin: auto;
+    }
+}
+
+.circles-bottom {
+    margin: auto;
+    padding-top: 1.5em;
+    margin-left: auto;
+    margin-right: auto;
+    height: fit-content;
+}
+
+.sidebar-about img {
+    height: 0.8em;
+    display: inline-block;
+    margin: auto;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    /*padding-right: 0.2em;
+    padding-left: 0.2em;
+    transform: translate(0em, 0.05em);*/
+}
