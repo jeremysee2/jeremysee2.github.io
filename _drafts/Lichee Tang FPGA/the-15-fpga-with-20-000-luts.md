@@ -17,6 +17,27 @@ So, what are the downsides? Firstly, it's just not well supported by the communi
 
 However, for a beginner like me, we can wait to sort out those problems later... I just want to have a cheap and user-friendly platform to learn Verilog! 
 
+### Toolchain Setup
+
+To set up the toolchain for this board, you can follow the official tutorial at the [Sipeed wiki](https://tang.sipeed.com/en/getting-started/). I'll briefly go through the setup steps:
+
+1. Download the appropriate copy of [Tang Dynasty IDE from Sipeed](http://dl.sipeed.com/TANG/Primer/IDE)
+2. Download the datasheet for the board and IDE from [here](https://github.com/kprasadvnsi/Anlogic_Doc_English)
+3. For Linux, follow the setup guidelines [here](http://cgoxopx.sinriv.com/psg/2019-8-31:19:28:32) and run the `td -gui` command to open the IDE
+4. For Windows, install using the executable and [set your system time](https://runasdate.en.softonic.com/) to be before 2018, to enable the provided Sipeed license. Then, you will be able to run the TD IDE with the ability to synthesise the bitstream
+5. Install the USB drivers [here](https://tang.sipeed.com/en/getting-started/installing-usb-driver/) 
+6. Double-check that your setup is valid by [running the Blinky example](https://tang.sipeed.com/en/getting-started/getting-to-blinky/)
+
+### Tutorial 0: Logic Gates
+
+To illustrate the differences between an FPGA and an embedded microcontroller, it's good practice to start by coding some logic gates in the FPGA to link some buttons and LEDs.
+
+### Tutorial 1: Seven Segment Display
+
+In this tutorial, we will control a seven segment display using the FPGA. This will introduce concepts such as `module` where code can be written and reused, a similar paradigm to Object Oriented Programming.
+
+### References
+
 For this tutorial I referenced the following sources:
 
 * [Nandland tutorials](https://github.com/nandland/nandland)
