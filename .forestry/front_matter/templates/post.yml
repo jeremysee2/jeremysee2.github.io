@@ -5,6 +5,8 @@ fields:
 - type: text
   name: layout
   label: layout
+  description: Use 'post' for normal posts and 'page' for posts that show up in the
+    menu sidebar
 - type: text
   name: title
   label: title
