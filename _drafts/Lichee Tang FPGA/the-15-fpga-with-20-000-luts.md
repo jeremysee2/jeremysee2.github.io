@@ -28,17 +28,21 @@ To set up the toolchain for this board, you can follow the official tutorial at 
 5. Install the USB drivers [here](https://tang.sipeed.com/en/getting-started/installing-usb-driver/) 
 6. Double-check that your setup is valid by [running the Blinky example](https://tang.sipeed.com/en/getting-started/getting-to-blinky/)
 
-### Tutorial 0: Logic Gates
+### Tutorial 0: FPGA Basics
+
+As this series of tutorials were inspired by [Nandland](https://www.youtube.com/channel/UCsdA-aNqtMA1_2T15aXePWw), I highly recommend you check out his videos before moving to the next few ones that actually involve implementing your designs on a physical FPGA.
+
+### Tutorial 1: Logic Gates
 
 To illustrate the differences between an FPGA and an embedded microcontroller, it's good practice to start by coding some logic gates in the FPGA to link some buttons and LEDs.
 
-### Tutorial 1: Seven Segment Display
+### Tutorial 2: Seven Segment Display
 
 In this tutorial, we will control a seven segment display using the FPGA. This will introduce concepts such as `module` where code can be written and reused, a similar paradigm to Object Oriented Programming.
 
-### Tutorial 2: UART Interface
+### Tutorial 3: UART Interface
 
-### Tutorial 3: VGA Interface
+### Tutorial 4: VGA Interface
 
 ### References
 
