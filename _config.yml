@@ -20,6 +20,7 @@ gem: [jekyll-paginate, jekyll-gists]
 
 plugins:
   - jekyll-paginate
+  - jekyll-menus
 paginate:         10
 
 # Custom vars
