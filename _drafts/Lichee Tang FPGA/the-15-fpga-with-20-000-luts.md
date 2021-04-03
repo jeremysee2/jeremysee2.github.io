@@ -15,4 +15,12 @@ The Lichee Tang Primer is a low-cost FPGA board made by Sipeed, using Anlogic's 
 
 So, what are the downsides? Firstly, it's just not well supported by the community or industry - meaning you'll need to learn those pesky Quartus/Vivado tools eventually if you go into industry. Secondly, you'll need to dig through documentation to use specific features (SERDES, ADC, PLL...) and vendor-provided IP.
 
-However, for a beginner like me, we can wait to sort out those problems later... I just want to have a cheap and user-friendly platform to learn Verilog!
+However, for a beginner like me, we can wait to sort out those problems later... I just want to have a cheap and user-friendly platform to learn Verilog! 
+
+For this tutorial I referenced the following sources:
+
+* [Nandland tutorials](https://github.com/nandland/nandland)
+* [Seven segment tutorial](https://github.com/ombhilare999/Seven-Segment-with-Tang-Primer-FPGA)
+* [VGA tutorial](https://github.com/piotr-go/Lichee-Tang)
+* [Official Sipeed tutorial](https://github.com/Lichee-Pi/Tang_FPGA_Examples)
+* [Picorv32 tutorial](https://github.com/nekomona/picorv32-tang)
