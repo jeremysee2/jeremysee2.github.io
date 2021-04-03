@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Algothon 2021 - ML in Finance
-
+date: 2021-03-28
 ---
 ## Algothon 2021 - ML in Finance
 

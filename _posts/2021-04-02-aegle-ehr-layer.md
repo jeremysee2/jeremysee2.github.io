@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Aegle - EHR Modernisation Layer
-
+date: 2020-01-20
 ---
 ## Aegle - EHR Modernisation Layer
 

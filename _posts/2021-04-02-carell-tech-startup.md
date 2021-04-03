@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Carell Technologes - my startup
-
+date: 2019-10-20
 ---
 ## Carell Technologies: My wearables startup
 

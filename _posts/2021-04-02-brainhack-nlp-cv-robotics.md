@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Brainhack - NLP and CV in Robotics
-
+date: 2020-06-25
 ---
 ## DSTA Brainhack 2020: NLP/CV in Robotics
 
