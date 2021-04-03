@@ -1,7 +1,8 @@
 ---
 layout: page
 title: 60GHz Radar - GovTech Embedded Systems Internship
-date: 2021-03-21
+date: 2021-03-30 16:00:00 +0000
+
 ---
 ## 60GHz Radar: Embedded Systems Sensors
 
