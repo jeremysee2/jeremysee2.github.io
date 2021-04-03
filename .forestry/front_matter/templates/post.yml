@@ -13,3 +13,12 @@ fields:
   config:
     required: false
   label: menus
+- name: date
+  type: datetime
+  label: date
+  description: ''
+  config:
+    required: false
+    date_format: 
+    time_format: 
+    display_utc: false
