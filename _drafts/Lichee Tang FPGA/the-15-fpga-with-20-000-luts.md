@@ -348,7 +348,7 @@ Now, double click on `Generate Bitstream` to start the whole process of synthesi
 
 ![](/uploads/td-newproject-5.PNG)
 
-This will generate a `.bit` file, the bitstream to be uploaded to the board. Double-click on `Download` and `Add` the file. Click `Run` to upload the file directly to the FPGA. As the FPGA fabric is volatile, it will lose its configuration when powered off. To keep it, you will need to `Create Flash File` and upload that file to the flash instead. We won't be covering that here as it's not immediately useful for learning purposes.
+This will generate a `.bit` file, the bitstream to be uploaded to the board. Double-click on `Download` and `Add` the file. Click `Run` to upload the file directly to the FPGA. As the FPGA fabric is volatile, it will lose its configuration when powered off. To keep it, you will need to `Create Flash File` and upload that file to the flash instead. We won't be covering that here as it's not immediately useful for learning purposes. You should see the same behavior observed in your simulation.
 
 Congratulations! You've done your first FPGA project and you're well on your way down a rabbit hole of programmable logic fun!
 
@@ -358,7 +358,11 @@ In this tutorial, we will control a seven segment display using the FPGA. This w
 
 ### Tutorial 3: UART Interface
 
+In this tutorial, we will create a UART interface to send and receive data with your computer. This introduces the concept of a First In First Out (FIFO) buffer between the external UART interface and the internal FPGA logic. This is necessary as the UART peripheral and internal FPGA logic work in different clock domains, and may not always be available to receive data when it is transmitted/received.
+
 ### Tutorial 4: VGA Interface
+
+In this tutorial, we will explore the VGA specification to send RGB video data out to a monitor. This should work with any old or modern monitor. Modern monitors may rescale your image to fit the 16:9 aspect ratio of your screen.
 
 ### References
 
