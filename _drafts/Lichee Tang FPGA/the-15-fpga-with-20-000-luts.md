@@ -44,7 +44,7 @@ For Linux, you can install from premade packages [here](https://iverilog.fandom.
 
 #### Setting up Visual Studio Code
 
-I personally prefer using Visual Studio Code (VSC) as my text editor for this series, as it has some community extensions that provide linting of Verilog code. Follow [this](https://code.visualstudio.com/download) guide to install VSC, and install the extension `mshr-h.veriloghdl`. 
+I personally prefer using Visual Studio Code (VSC) as my text editor for this series, as it has some community extensions that provide linting of Verilog code. Follow [this](https://code.visualstudio.com/download) guide to install VSC, and install the extension `mshr-h.veriloghdl`.
 
 After installing the extension, go to `File >> Preferences >> Settings` and search for Verilog.
 
@@ -340,7 +340,11 @@ Now, we've got to define our Constraints file, which defines how these pins are 
     set_pin_assignment	{ o_LED_3 }	{ LOCATION = C9; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
     set_pin_assignment	{ o_LED_4 }	{ LOCATION = B10; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
 
-Right-click `Constraints` and `Add ADC File`. 
+If you are making your own connections, refer to the [schematic](https://tang.sipeed.com/en/hardware-overview/lichee-tang/) for the correct `LOCATION`.
+
+![](/uploads/tang-pins.PNG)
+
+Right-click `Constraints` and `Add ADC File`.
 
 ![](/uploads/td-newproject-4.PNG)
 
