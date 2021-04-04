@@ -56,7 +56,7 @@ Look for `Verilog >> Linting >> iverilog` and check that box. Then, select `iver
 
 In Verilog, a module is defined with the keyword `module`. The following is an example of how a module is defined.
 
-    module Switches_To_LEDs
+    module SwitchesToLEDs
       (input i_Switch_1,  
        input i_Switch_2,
        input i_Switch_3,
@@ -79,9 +79,134 @@ Variables can have two main types in synthesizable Verilog: `wire` or `reg` for 
 
 The keyword `assign` can only be used with `wire` type variables, thereby driving the signal continuously. These will always be active, not just at the clock edge.
 
+This example from Nandland illustrates how you can take several button inputs and directly connect them to LED outputs.
+
 #### Logic Gates
 
-Now that we've taken a look at this basic example, let's try to extend it with some logic gates.
+Now that we've taken a look at this basic example, let's try to modify it with some logic gates.
+
+    // Logic gate examples
+    module SwitchesToLEDs
+      (input i_Switch_1,  
+       input i_Switch_2,
+       output o_LED_1,
+       output o_LED_2,
+       output o_LED_3,
+       output o_LED_4);
+           
+    assign o_LED_1 = i_Switch_1 & i_Switch_2;     // AND  gate
+    assign o_LED_2 = i_Switch_1 | i_Switch_2;     // OR   gate
+    assign o_LED_3 = ~(i_Switch_1 & i_Switch_2);  // NAND gate
+    assign o_LED_4 = i_Switch_1 ^  i_Switch_2;    // XOR  gate
+     
+    endmodule
+
+In this example, we use the bitwise operators `&`, `|`, `~` and `^` for AND, OR, NOT and XOR. It is also possible to use full logical operators such as `&&`, `||` and `!` for AND, OR and NOT.  A deep dive into operators is available [here](http://web.engr.oregonstate.edu/\~traylor/ece474/beamer_lectures/verilog_operators.pdf).
+
+#### Creating a Testbench for Simulation
+
+Now, let's save our file as `SwitchesToLEDs.v`. Create a new file for our testbench called `SwitchesToLEDs_tb.v`. At the start of the file, we will define the timescale for which the simulation is done over, which is the duration of one clock pulse.
+
+```v
+`timescale 1ns/1ns
+```
+
+Following that, we will need to include the source Verilog file of our module.
+
+```v
+`include "SwitchesToLEDs.v"
+```
+
+Then, we will create our testbench module. Testbenches don't contain inputs or outputs, hence there are no brackets containing them.
+
+```v
+`timescale 1ns/1ns
+`include "SwitchesToLEDs.v"
+
+module SwitchesToLEDs_tb;
+	// Code for testbench here
+endmodule
+```
+
+Now we create the inputs and outputs for our module, which we call the Unit Under Test (UUT). `reg` for inputs and `wire` for outputs, the reverse of what we declared in the actual module. This allows us to drive the inputs and read the outputs of the UUT.
+
+    `timescale 1ns/1ns
+    `include "SwitchesToLEDs.v"
+    
+    module SwitchesToLEDs_tb;
+    	reg i_Switch_1;
+        reg i_Switch_2;
+        wire o_LED_1;
+        wire o_LED_2;
+        wire o_LED_3;
+        wire o_LED_4;
+        
+        // Code for testbench here
+    endmodule
+
+Next, we instantiate the UUT. When instantiating a module, the format is `moduleName (parameters) InstanceName (inputs/outputs)`. You can provide the inputs/outputs in order, or you can use their internal variable names to match them, as shown below.
+
+    `timescale 1ns/1ns
+    `include "SwitchesToLEDs.v"
+    
+    module SwitchesToLEDs_tb;
+    	reg i_Switch_1;
+        reg i_Switch_2;
+        wire o_LED_1;
+        wire o_LED_2;
+        wire o_LED_3;
+        wire o_LED_4;
+        
+        // Instantiating module to test
+        SwitchesToLEDs uut(
+        	.i_Switch_1(i_Switch_1),
+            .i_Switch_2(i_Switch_2),
+            .o_LED_1(o_LED_1),
+            .o_LED_2(o_LED_2),
+            .o_LED_3(o_LED_3),
+            .o_LED_4(o_LED_4)
+        );
+        // Code for testbench here
+    endmodule
+
+Now, let's initialise the testbench procedure that we want to conduct. The `initial` keyword allows us to define behaviour that only happens once, at the beginning. Verilog doesn't use curly braces to detect code blocks, rather it uses `begin` and `end` keywords.
+
+To output the simulated values of all testbench variables, use the command `$dumpfile()` and `$dumpvars()` to save them into a `vcd` format readable by `gtkwave`.
+
+```v
+`timescale 1ns/1ns
+`include "SwitchesToLEDs.v"
+
+module SwitchesToLEDs_tb;
+	reg i_Switch_1;
+    reg i_Switch_2;
+    wire o_LED_1;
+    wire o_LED_2;
+    wire o_LED_3;
+    wire o_LED_4;
+    
+    // Instantiating module to test
+    SwitchesToLEDs uut(
+    	.i_Switch_1(i_Switch_1),
+        .i_Switch_2(i_Switch_2),
+        .o_LED_1(o_LED_1),
+        .o_LED_2(o_LED_2),
+        .o_LED_3(o_LED_3),
+        .o_LED_4(o_LED_4)
+    );
+    
+    initial begin
+    	// Define testbench behaviour
+        $dumpfile("SwitchesToLEDs_tb.vcd");
+        $dumpvars(0, SwitchesToLEDs_tb);
+        
+        // Code for testbench here
+    end
+    
+endmodule
+```
+
+Since we want to test our AND, OR, NAND and XOR gate behavior, let's create a truth table for the expected outputs for every given set of inputs of switches 1 and 2.
 
 ### Tutorial 2: Seven Segment Display
 
