@@ -32,7 +32,13 @@ To set up the toolchain for this board, you can follow the official tutorial at 
 
 As this series of tutorials were inspired by [Nandland](https://www.youtube.com/channel/UCsdA-aNqtMA1_2T15aXePWw), I highly recommend you check out his videos before moving to the next few ones that actually involve implementing your designs on a physical FPGA.
 
-For this tutorial, we will follow along with this [lecture by Derek Johnston](https://www.youtube.com/watch?v=wAxribz8jj0). Here, we will be setting up our development environment and writing a simple Verilog module and testbench with iverilog and gtkwave.
+For this tutorial, we will follow along with this [lecture by Derek Johnston](https://www.youtube.com/watch?v=wAxribz8jj0). Here, we will be setting up our development environment and writing a simple Verilog module and testbench with `iverilog` and `gtkwave`.
+
+Firstly, we'll want to install `iverilog` and `gtkwave`. `iverilog` is the Verilog compiler to perform simulations, and `gtkwave`allows you to view the resulting waveform.
+
+Installing `iverilog` 
+
+For Windows, download the setup executable [here](http://bleyer.org/icarus/). Run the installer and check the "Add to PATH" option to automatically add it to PATH, allowing you to call it from the terminal.
 
 ### Tutorial 1: Logic Gates
 
