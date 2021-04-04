@@ -206,7 +206,143 @@ module SwitchesToLEDs_tb;
 endmodule
 ```
 
-Since we want to test our AND, OR, NAND and XOR gate behavior, let's create a truth table for the expected outputs for every given set of inputs of switches 1 and 2.
+Since we want to test our AND, OR, NAND and XOR gate behavior, let's create a truth table for the expected outputs for every given set of inputs. For simplicity, let's call the switches A and B respectively, and outputs C, D, E, F.
+
+    | A | B | C | D | E | F |
+    |---|---|---|---|---|---|
+    | 0 | 0 | 0 | 0 | 1 | 0 |
+    | 1 | 0 | 0 | 1 | 1 | 1 |
+    | 0 | 1 | 0 | 1 | 1 | 1 |
+    | 1 | 1 | 1 | 1 | 0 | 0 |
+
+Setting these inputs respectively, with a delay of 10 timesteps using `#10` in the testbench. The curly bracket notation groups signals into buses from left to right, Most Significant Bit to Least Significant Bit.
+
+```v
+`timescale 1ns/1ns
+`include "SwitchesToLEDs.v"
+
+module SwitchesToLEDs_tb;
+	reg i_Switch_1;
+    reg i_Switch_2;
+    wire o_LED_1;
+    wire o_LED_2;
+    wire o_LED_3;
+    wire o_LED_4;
+    
+    // Instantiating module to test
+    SwitchesToLEDs uut(
+    	.i_Switch_1(i_Switch_1),
+        .i_Switch_2(i_Switch_2),
+        .o_LED_1(o_LED_1),
+        .o_LED_2(o_LED_2),
+        .o_LED_3(o_LED_3),
+        .o_LED_4(o_LED_4)
+    );
+    
+    initial begin
+    	// Define testbench behaviour
+        $dumpfile("SwitchesToLEDs_tb.vcd");
+        $dumpvars(0, SwitchesToLEDs_tb);
+        
+        // Test conditions
+        {i_Switch_1, i_Switch_2} = 2'b00; #10;
+        {i_Switch_1, i_Switch_2} = 2'b10; #10;
+        {i_Switch_1, i_Switch_2} = 2'b01; #10;
+        {i_Switch_1, i_Switch_2} = 2'b11; #10;
+    end
+    
+endmodule
+```
+
+Knowing that our test cases are sequentially incrementing, we can use a `for` loop using an `integer` variable. However, keep in mind that these constructs are not synthesizable and cannot be used in your main module. Keep in mind that `++` is not valid to increment your counter. Use `$display()` to print messages to terminal.
+
+```v
+`timescale 1ns/1ns
+`include "SwitchesToLEDs.v"
+
+module SwitchesToLEDs_tb;
+	reg i_Switch_1;
+    reg i_Switch_2;
+    wire o_LED_1;
+    wire o_LED_2;
+    wire o_LED_3;
+    wire o_LED_4;
+    
+    // Instantiating module to test
+    SwitchesToLEDs uut(
+    	.i_Switch_1(i_Switch_1),
+        .i_Switch_2(i_Switch_2),
+        .o_LED_1(o_LED_1),
+        .o_LED_2(o_LED_2),
+        .o_LED_3(o_LED_3),
+        .o_LED_4(o_LED_4)
+    );
+    
+    initial begin
+    	// Define testbench behaviour
+        $dumpfile("SwitchesToLEDs_tb.vcd");
+        $dumpvars(0, SwitchesToLEDs_tb);
+        
+        // Test conditions
+        for (integer i=0; i<4; i = i+1) begin
+        	{i_Switch_1, i_Switch_2} = i;
+            #10;
+        end
+        
+        $display("Test completed!");
+    end
+    
+endmodule
+```
+
+With this, we have finished our Verilog testbench. To run it and generate the `vvp` file, use the following command:
+
+    iverilog -o SwitchesToLEDs_tb.vvp SwitchesToLEDs_tb.v
+
+Then, create the output `vcd` file.
+
+    vvp SwitchesToLEDs_tb.vvp 
+
+Now, let's open `gtkwave` by typing that in a terminal, bringing up the GUI. Click on `File >> Open New Tab` and find your `.vcd` output file.
+
+![](/uploads/gtkwave_tut0_1.PNG)
+
+Select all your signals by clicking on the top one, then Shift+click on the bottom to select all. Click `Append` to add them to the waveform viewer.
+
+![](/uploads/gtkwave_tut0_2.PNG)
+
+Comparing the result of our waveforms to the truth table, we see that everything is working fine! Look horizontal across the truth table and vertical down the waveform for a 1:1 comparison in this case.
+
+#### Deploying to hardware
+
+Now that we know our program works fine with the simulator, let's deploy it on actual hardware! Open up the Tang Dynasty IDE using either `td -gui` in Linux or through your TimeAsDate program in Windows.
+
+Right-click the Project menu and click on `New Project`.
+
+![](/uploads/td-newproject-1.PNG)
+
+Select the correct device name for the board, `EG4X20BG256`.
+
+![](/uploads/td-newproject-2.PNG)
+
+If you've saved your Verilog source file in the same directory, you can click `Add Sources` to add your source file to the project. If not, click `New Source` and paste in your Verilog code from `SwitchesToLEDs.v`.
+
+![](/uploads/td-newproject-3.PNG)
+
+The IDE will automatically set your only source file as the Top module. In a Verilog design, the project starts from the Top module, which contains instantiations of all other modules in the hierarchy. We'll touch on this in a later tutorial where we combine multiple Verilog source files into a single design.
+
+Now, we've got to define our Constraints file, which defines how these pins are connected to external I/O on the FPGA. In your text editor, create a file called `io.adc` and save it with the following contents. `LOCATION` defines the external pin, `IOSTANDARD` defines the voltage logic levels and `DRIVESTRENGTH` defines the current driver strength in mA.
+
+    set_pin_assignment	{ i_Switch_1 }	{ LOCATION = A4; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ i_Switch_2 }	{ LOCATION = A3; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ o_LED_1 }	{ LOCATION = C5; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ o_LED_2 }	{ LOCATION = B6; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ o_LED_3 }	{ LOCATION = C9; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ o_LED_4 }	{ LOCATION = B10; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+
+Right-click `Constraints` and `Add ADC File`. 
+
+Congratulations! You've done your first FPGA project and you're well on your way down a rabbit hole of programmable logic fun!
 
 ### Tutorial 2: Seven Segment Display
 
