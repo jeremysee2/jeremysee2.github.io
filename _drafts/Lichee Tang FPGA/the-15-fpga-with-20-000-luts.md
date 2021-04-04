@@ -333,14 +333,22 @@ The IDE will automatically set your only source file as the Top module. In a Ver
 
 Now, we've got to define our Constraints file, which defines how these pins are connected to external I/O on the FPGA. In your text editor, create a file called `io.adc` and save it with the following contents. `LOCATION` defines the external pin, `IOSTANDARD` defines the voltage logic levels and `DRIVESTRENGTH` defines the current driver strength in mA.
 
-    set_pin_assignment	{ i_Switch_1 }	{ LOCATION = A4; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
-    set_pin_assignment	{ i_Switch_2 }	{ LOCATION = A3; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
+    set_pin_assignment	{ i_Switch_1 }	{ LOCATION = A4; IOSTANDARD = LVCMOS33; }
+    set_pin_assignment	{ i_Switch_2 }	{ LOCATION = A3; IOSTANDARD = LVCMOS33; }
     set_pin_assignment	{ o_LED_1 }	{ LOCATION = C5; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
     set_pin_assignment	{ o_LED_2 }	{ LOCATION = B6; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
     set_pin_assignment	{ o_LED_3 }	{ LOCATION = C9; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
     set_pin_assignment	{ o_LED_4 }	{ LOCATION = B10; IOSTANDARD = LVCMOS33; DRIVESTRENGTH = 20; }
 
 Right-click `Constraints` and `Add ADC File`. 
+
+![](/uploads/td-newproject-4.PNG)
+
+Now, double click on `Generate Bitstream` to start the whole process of synthesis, place-and-route, and implementation. Alternatively, you can step through this process one at a time.
+
+![](/uploads/td-newproject-5.PNG)
+
+This will generate a `.bit` file, the bitstream to be uploaded to the board. Double-click on `Download` and `Add` the file. Click `Run` to upload the file directly to the FPGA. As the FPGA fabric is volatile, it will lose its configuration when powered off. To keep it, you will need to `Create Flash File` and upload that file to the flash instead. We won't be covering that here as it's not immediately useful for learning purposes.
 
 Congratulations! You've done your first FPGA project and you're well on your way down a rabbit hole of programmable logic fun!
 
