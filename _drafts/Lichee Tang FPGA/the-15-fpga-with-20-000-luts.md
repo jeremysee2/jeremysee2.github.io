@@ -42,6 +42,16 @@ For Windows, download the setup executable [here](http://bleyer.org/icarus/). Ru
 
 For Linux, you can install from premade packages [here](https://iverilog.fandom.com/wiki/Installation_Guide#Installation_From_Premade_Packages). Follow the instructions for your distro. For Ubuntu, add the Universe repository to your `/etc/apt/sources.list` and run the command `sudo apt-get install iverilog gtkwave`.
 
+#### Setting up Visual Studio Code
+
+I personally prefer using Visual Studio Code (VSC) as my text editor for this series, as it has some community extensions that provide linting of Verilog code. Follow [this](https://code.visualstudio.com/download) guide to install VSC, and install the extension `mshr-h.veriloghdl`. 
+
+After installing the extension, go to `File >> Preferences >> Settings` and search for Verilog.
+
+![](/uploads/vsc_verilog.PNG)
+
+Look for `Verilog >> Linting >> iverilog` and check that box. Then, select `iverilog` as your linter of choice. This will run `iverilog` at your code location and dynamically provide code completion and check for syntax errors. However, this does not check for logical errors, which you will need to debug using simulation.
+
 #### Module Structure
 
 In Verilog, a module is defined with the keyword `module`. The following is an example of how a module is defined.
@@ -70,6 +80,8 @@ Variables can have two main types in synthesizable Verilog: `wire` or `reg` for 
 The keyword `assign` can only be used with `wire` type variables, thereby driving the signal continuously. These will always be active, not just at the clock edge.
 
 #### Logic Gates
+
+Now that we've taken a look at this basic example, let's try to extend it with some logic gates.
 
 ### Tutorial 2: Seven Segment Display
 
