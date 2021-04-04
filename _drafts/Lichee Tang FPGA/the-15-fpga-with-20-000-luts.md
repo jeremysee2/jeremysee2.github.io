@@ -28,11 +28,11 @@ To set up the toolchain for this board, you can follow the official tutorial at 
 5. Install the USB drivers [here](https://tang.sipeed.com/en/getting-started/installing-usb-driver/)
 6. Double-check that your setup is valid by [running the Blinky example](https://tang.sipeed.com/en/getting-started/getting-to-blinky/)
 
-### Tutorial 0: FPGA Basics
+### Tutorial 1: FPGA Basics
 
 As this series of tutorials were inspired by [Nandland](https://www.youtube.com/channel/UCsdA-aNqtMA1_2T15aXePWw), I highly recommend you check out his videos before moving to the next few ones that actually involve implementing your designs on a physical FPGA.
 
-For this tutorial, we will follow along with this [lecture by Derek Johnston](https://www.youtube.com/watch?v=wAxribz8jj0). Here, we will be setting up our development environment and writing a simple Verilog module and testbench with `iverilog` and `gtkwave`.
+For this tutorial, we will follow along with the [first lecture](https://www.youtube.com/watch?v=l_eo21vHxw0&list=PLnAoag7Ew-vr1M98Q5K2kLHxFQ5l0DU3B&index=4) of Nandland. Here, we will be setting up our development environment and writing a simple Verilog module and testbench with `iverilog` and `gtkwave`.
 
 Firstly, we'll want to install `iverilog` and `gtkwave`. `iverilog` is the Verilog compiler to perform simulations, and `gtkwave`allows you to view the resulting waveform.
 
@@ -42,9 +42,29 @@ For Windows, download the setup executable [here](http://bleyer.org/icarus/). Ru
 
 For Linux, you can install from premade packages [here](https://iverilog.fandom.com/wiki/Installation_Guide#Installation_From_Premade_Packages). Follow the instructions for your distro. For Ubuntu, add the Universe repository to your `/etc/apt/sources.list` and run the command `sudo apt-get install iverilog gtkwave`. 
 
-### Tutorial 1: Logic Gates
+#### Module Structure
 
-To illustrate the differences between an FPGA and an embedded microcontroller, it's good practice to start by coding some logic gates in the FPGA to link some buttons and LEDs. We'll also generate a testbench using `iverilog` as it's an easy-to-use open-source Verilog simulator.
+In Verilog, a module is defined with the keyword `module`. The following is an example of how a module is defined.
+
+    verilog
+    module Switches_To_LEDs
+      (input i_Switch_1,  
+       input i_Switch_2,
+       input i_Switch_3,
+       input i_Switch_4,
+       output o_LED_1,
+       output o_LED_2,
+       output o_LED_3,
+       output o_LED_4);
+           
+    assign o_LED_1 = i_Switch_1;
+    assign o_LED_2 = i_Switch_2;
+    assign o_LED_3 = i_Switch_3;
+    assign o_LED_4 = i_Switch_4;
+     
+    endmodule
+
+#### Logic Gates
 
 ### Tutorial 2: Seven Segment Display
 
