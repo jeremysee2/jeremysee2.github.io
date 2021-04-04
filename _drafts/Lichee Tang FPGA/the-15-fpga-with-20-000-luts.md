@@ -1,7 +1,7 @@
 ---
 layout: post
 title: The $15 FPGA with 20,000 LUTs
-date: 
+date: 2021-03-31 16:00:00 +0000
 menus: ''
 
 ---
