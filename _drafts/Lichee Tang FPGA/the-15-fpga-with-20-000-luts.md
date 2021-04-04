@@ -38,15 +38,14 @@ Firstly, we'll want to install `iverilog` and `gtkwave`. `iverilog` is the Veril
 
 #### Installing `iverilog` and `gtkwave`
 
-For Windows, download the setup executable [here](http://bleyer.org/icarus/). Run the installer and check the "Add to PATH" option to automatically add it to PATH, allowing you to call it from the terminal. This executable also allows you to install `gtkwave` at the same time. 
+For Windows, download the setup executable [here](http://bleyer.org/icarus/). Run the installer and check the "Add to PATH" option to automatically add it to PATH, allowing you to call it from the terminal. This executable also allows you to install `gtkwave` at the same time.
 
-For Linux, you can install from premade packages [here](https://iverilog.fandom.com/wiki/Installation_Guide#Installation_From_Premade_Packages). Follow the instructions for your distro. For Ubuntu, add the Universe repository to your `/etc/apt/sources.list` and run the command `sudo apt-get install iverilog gtkwave`. 
+For Linux, you can install from premade packages [here](https://iverilog.fandom.com/wiki/Installation_Guide#Installation_From_Premade_Packages). Follow the instructions for your distro. For Ubuntu, add the Universe repository to your `/etc/apt/sources.list` and run the command `sudo apt-get install iverilog gtkwave`.
 
 #### Module Structure
 
 In Verilog, a module is defined with the keyword `module`. The following is an example of how a module is defined.
 
-    verilog
     module Switches_To_LEDs
       (input i_Switch_1,  
        input i_Switch_2,
@@ -63,6 +62,12 @@ In Verilog, a module is defined with the keyword `module`. The following is an e
     assign o_LED_4 = i_Switch_4;
      
     endmodule
+
+A module always starts with the keyword `module` followed by the name of the module. Following that, the `input` and `output` wires/registers to the module are defined. It's good practice to label your variables appropriately, such as `i` for inputs and `o` for outputs. Remember to put the keyword `endmodule` at the end of your file.
+
+Variables can have two main types in synthesizable Verilog: `wire` or `reg` for outputs and `wire` only for inputs. `wire` describes a physical connection between two ports, where any change in the driven state is propagated to the other side of the connection and is only compatible with combinational logic. `reg` is for driver states, where you can change the value of the variable using sequential logic as well.
+
+The keyword `assign` can only be used with `wire` type variables, thereby driving the signal continuously. These will always be active, not just at the clock edge.
 
 #### Logic Gates
 
