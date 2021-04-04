@@ -362,7 +362,7 @@ In this tutorial, we will create a UART interface to send and receive data with 
 
 ### Tutorial 4: VGA Interface
 
-In this tutorial, we will explore the VGA specification to send RGB video data out to a monitor. This should work with any old or modern monitor. Modern monitors may rescale your image to fit the 16:9 aspect ratio of your screen.
+In this tutorial, we will explore the VGA specification to send RGB video data out to a monitor. This should work with any old or modern monitor. Modern monitors may rescale your image to fit the 16:9 aspect ratio.
 
 ### References
 
