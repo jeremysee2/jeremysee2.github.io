@@ -32,6 +32,8 @@ To set up the toolchain for this board, you can follow the official tutorial at 
 
 As this series of tutorials were inspired by [Nandland](https://www.youtube.com/channel/UCsdA-aNqtMA1_2T15aXePWw), I highly recommend you check out his videos before moving to the next few ones that actually involve implementing your designs on a physical FPGA.
 
+For this tutorial, we will follow along with this [lecture by Derek Johnston](https://www.youtube.com/watch?v=wAxribz8jj0). Here, we will be setting up our development environment and writing a simple Verilog module and testbench with iverilog and gtkwave.
+
 ### Tutorial 1: Logic Gates
 
 To illustrate the differences between an FPGA and an embedded microcontroller, it's good practice to start by coding some logic gates in the FPGA to link some buttons and LEDs. We'll also generate a testbench using `iverilog` as it's an easy-to-use open-source Verilog simulator.
