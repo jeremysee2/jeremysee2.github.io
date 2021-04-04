@@ -36,9 +36,11 @@ For this tutorial, we will follow along with this [lecture by Derek Johnston](ht
 
 Firstly, we'll want to install `iverilog` and `gtkwave`. `iverilog` is the Verilog compiler to perform simulations, and `gtkwave`allows you to view the resulting waveform.
 
-Installing `iverilog` 
+#### Installing `iverilog` and `gtkwave`
 
-For Windows, download the setup executable [here](http://bleyer.org/icarus/). Run the installer and check the "Add to PATH" option to automatically add it to PATH, allowing you to call it from the terminal.
+For Windows, download the setup executable [here](http://bleyer.org/icarus/). Run the installer and check the "Add to PATH" option to automatically add it to PATH, allowing you to call it from the terminal. This executable also allows you to install `gtkwave` at the same time. 
+
+For Linux, you can install from premade packages [here](https://iverilog.fandom.com/wiki/Installation_Guide#Installation_From_Premade_Packages). Follow the instructions for your distro. For Ubuntu, add the Universe repository to your `/etc/apt/sources.list` and run the command `sudo apt-get install iverilog gtkwave`. 
 
 ### Tutorial 1: Logic Gates
 
