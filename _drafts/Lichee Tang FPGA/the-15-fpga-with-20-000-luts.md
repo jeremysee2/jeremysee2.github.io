@@ -342,7 +342,7 @@ Now, we've got to define our Constraints file, which defines how these pins are 
 
 If you are making your own connections, refer to the [schematic](https://tang.sipeed.com/en/hardware-overview/lichee-tang/) for the correct `LOCATION`.
 
-![](/uploads/tang-pins.PNG)
+![](/uploads/tang-pins-1.PNG)
 
 Right-click `Constraints` and `Add ADC File`.
 
