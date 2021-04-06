@@ -466,7 +466,131 @@ module UART_TX
 endmodule
 ```
 
-Next, we define the behaviour of the module.
+Next, we define the behaviour of the module. Within the main `always` block of the code, we have the state machine for the UART transmitter. 
+
+`IDLE` initialises the values of the output and internal signals, waiting for a ready signal on `i-TX-DV`. Once available, it saves the data to be sent `i-TX-Data` and goes to the next state.
+
+`TX-START-BIT` sends out the start bit, then waits for it to finish to adhere to timing. Once done, it moves to the next state to start sending data bits.
+
+`TX-DATA-BITS` handles the sending of the data, one bit at a time, according to the `r-Bit-Index` variable. It adheres to timing by waiting the appropriate amount of time after setting each output bit, effectively converting from parallel to serial data.
+
+`TX-STOP-BIT` state sets the stop bit, waits for some time, then sets the `r-TX-Done` flag to signal that transmission of the byte has finished. It then resets some internal signals, before moving on to the next state.
+
+`CLEANUP` state waits for one clock cycle, before going back to the `IDLE` state to wait for more data to be sent. Lastly, some `assign` statements connect internal signals to output ports.
+
+```verilog
+  always @(posedge i_Clock, negedge i_Reset)
+  begin
+    if (!i_Reset) begin
+        r_SM_Main <= IDLE;
+    end
+    case (r_SM_Main)
+      IDLE :
+        begin
+          o_TX_Serial   <= 1'b1;         // Drive Line High for Idle
+          r_TX_Done     <= 1'b0;
+          r_Clock_Count <= 0;
+          r_Bit_Index   <= 0;
+          
+          if (i_TX_DV == 1'b1)
+          begin
+            r_TX_Active <= 1'b1;
+            r_TX_Data   <= i_TX_Byte;
+            r_SM_Main   <= TX_START_BIT;
+          end
+          else
+            r_SM_Main <= IDLE;
+        end // case: IDLE
+      
+      
+      // Send out Start Bit. Start bit = 0
+      TX_START_BIT :
+        begin
+          o_TX_Serial <= 1'b0;
+          
+          // Wait CLKS_PER_BIT-1 clock cycles for start bit to finish
+          if (r_Clock_Count < CLKS_PER_BIT-1)
+          begin
+            r_Clock_Count <= r_Clock_Count + 1;
+            r_SM_Main     <= TX_START_BIT;
+          end
+          else
+          begin
+            r_Clock_Count <= 0;
+            r_SM_Main     <= TX_DATA_BITS;
+          end
+        end // case: TX_START_BIT
+      
+      
+      // Wait CLKS_PER_BIT-1 clock cycles for data bits to finish         
+      TX_DATA_BITS :
+        begin
+          o_TX_Serial <= r_TX_Data[r_Bit_Index];
+          
+          if (r_Clock_Count < CLKS_PER_BIT-1)
+          begin
+            r_Clock_Count <= r_Clock_Count + 1;
+            r_SM_Main     <= TX_DATA_BITS;
+          end
+          else
+          begin
+            r_Clock_Count <= 0;
+            
+            // Check if we have sent out all bits
+            if (r_Bit_Index < 7)
+            begin
+              r_Bit_Index <= r_Bit_Index + 1;
+              r_SM_Main   <= TX_DATA_BITS;
+            end
+            else
+            begin
+              r_Bit_Index <= 0;
+              r_SM_Main   <= TX_STOP_BIT;
+            end
+          end 
+        end // case: TX_DATA_BITS
+      
+      
+      // Send out Stop bit.  Stop bit = 1
+      TX_STOP_BIT :
+        begin
+          o_TX_Serial <= 1'b1;
+          
+          // Wait CLKS_PER_BIT-1 clock cycles for Stop bit to finish
+          if (r_Clock_Count < CLKS_PER_BIT-1)
+          begin
+            r_Clock_Count <= r_Clock_Count + 1;
+            r_SM_Main     <= TX_STOP_BIT;
+          end
+          else
+          begin
+            r_TX_Done     <= 1'b1;
+            r_Clock_Count <= 0;
+            r_SM_Main     <= CLEANUP;
+            r_TX_Active   <= 1'b0;
+          end 
+        end // case: TX_STOP_BIT
+      
+      
+      // Stay here 1 clock
+      CLEANUP :
+        begin
+          r_TX_Done <= 1'b1;
+          r_SM_Main <= IDLE;
+        end
+      
+      
+      default :
+        r_SM_Main <= IDLE;
+      
+    endcase
+  end
+  
+  assign o_TX_Active = r_TX_Active;
+  assign o_TX_Done   = r_TX_Done;
+```
+
+s
 
 ```verilog
 //////////////////////////////////////////////////////////////////////
@@ -620,4 +744,88 @@ module UART_TX
 endmodule
 ```
 
-Next, let's set up a testbench to simulate the UART transmitter.
+Next, let's set up a testbench to simulate the UART transmitter and receiver in loopback mode, where the transmitter connects to the receiver.
+
+```verilog
+//////////////////////////////////////////////////////////////////////
+// File Downloaded from http://www.nandland.com
+//////////////////////////////////////////////////////////////////////
+
+// This testbench will exercise the UART RX.
+// It sends out byte 0x37, and ensures the RX receives it correctly.
+`timescale 1ns/10ps
+
+`include "UART_TX.v"
+
+module UART_TX_TB ();
+
+  // Testbench uses a 24 MHz clock (same as Lichee Tang board)
+  // Want to interface to 115200 baud UART
+  // 24000000 / 115200 = 208 Clocks Per Bit.
+  parameter c_CLOCK_PERIOD_NS = 41;
+  parameter c_CLKS_PER_BIT    = 208;
+  parameter c_BIT_PERIOD      = 8600;
+  
+  reg r_Clock = 0;
+  reg r_Reset = 1;
+  reg r_TX_DV = 0;
+  wire w_TX_Active, w_UART_Line;
+  wire w_TX_Serial;
+  reg [7:0] r_TX_Byte = 0;
+  wire [7:0] w_RX_Byte;
+
+  UART_RX #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_Inst
+    (.i_Clock(r_Clock),
+     .i_Reset(r_Reset),
+     .i_RX_Serial(w_UART_Line),
+     .o_RX_DV(w_RX_DV),
+     .o_RX_Byte(w_RX_Byte)
+     );
+  
+  UART_TX #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_TX_Inst
+    (.i_Clock(r_Clock),
+     .i_Reset(r_Reset),
+     .i_TX_DV(r_TX_DV),
+     .i_TX_Byte(r_TX_Byte),
+     .o_TX_Active(w_TX_Active),
+     .o_TX_Serial(w_TX_Serial),
+     .o_TX_Done()
+     );
+
+  // Keeps the UART Receive input high (default) when
+  // UART transmitter is not active
+  assign w_UART_Line = w_TX_Active ? w_TX_Serial : 1'b1;
+    
+  always
+    #(c_CLOCK_PERIOD_NS/2) r_Clock <= !r_Clock;
+  
+  // Main Testing:
+  initial
+    begin
+      // Tell UART to send a command (exercise TX)
+      @(posedge r_Clock);
+      @(posedge r_Clock);
+      r_TX_DV   <= 1'b1;
+      r_TX_Byte <= 8'h3F;
+      @(posedge r_Clock);
+      r_TX_DV <= 1'b0;
+
+      // Check that the correct command was received
+      @(posedge w_RX_DV);
+      if (w_RX_Byte == 8'h3F)
+        $display("Test Passed - Correct Byte Received");
+      else
+        $display("Test Failed - Incorrect Byte Received");
+      $finish();
+    end
+  
+  initial 
+  begin
+    // Required to dump signals to EPWave
+    $dumpfile("dump.vcd");
+    $dumpvars(0);
+  end
+endmodule
+```
+
+Finally, we've implemented a basic UART peripheral! You'll note that this only allows you to receive one byte at a time, and has no buffer to store the last few bytes. This means that whatever you send will push old data out of the system, which usually isn't desirable when you don't know when the next data byte will come - fast or slow.
