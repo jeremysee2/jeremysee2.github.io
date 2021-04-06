@@ -549,9 +549,9 @@ Before running the simulation, let's make some small changes to allow the simula
 Run the file with the following commands.
 
     iverilog -o Seven_Segment_Display_Top_tb.vvp Seven_Segment_Display_Top_tb.v
-
+    
     vvp Seven_Segment_Display_Top_tb.vvp 
-
+    
     gtkwave Seven_Segment_Display_Top_tb.vcd
 
 We get the following output waveform when viewed in `gtkwave`.
@@ -585,4 +585,4 @@ The constraints file `io.adc` is available here, change it according to your wir
     
     ## Seven Segment, 7 pins, common anode configuration
 
-### 
+Congratulations! You've successfully created your first visual interface using an FPGA!
