@@ -9,7 +9,7 @@ date: 2021-03-31 16:00:00 +0000
 
 In our [previous tutorial](https://jeremysee2.github.io/2021/03/31/tutorial-3-uart-inteface/), our UART interface could only send and receive one byte at a time. To solve that problem, let's implement a First In First Out (FIFO) buffer to hold the previous two values in data registers. We define some specifications for our FIFO buffer below.
 
-* 16 bit data bus
+* 16-bit data bus
 * Duplex read/write
 * Read and write enable
 * Full and Empty flags
