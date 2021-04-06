@@ -372,3 +372,5 @@ Congratulations! You've defined your first FIFO buffer. In practice, FIFO buffer
 Now, let's use this for our UART peripheral we designed in [Tutorial 3](https://jeremysee2.github.io/2021/03/31/tutorial-3-uart-inteface/)!
 
 #### Complete UART Transceiver
+
+Let's draw up a block diagram of what our UART transceiver should look like.
