@@ -90,6 +90,7 @@ module UART_RX
   #(parameter CLKS_PER_BIT = 208)
   (
    input        i_Clock,
+   input  		i_Reset,
    input        i_RX_Serial,
    output       o_RX_Data_Valid,
    output [7:0] o_RX_Byte
