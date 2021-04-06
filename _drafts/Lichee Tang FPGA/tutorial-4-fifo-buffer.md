@@ -15,6 +15,129 @@ In our [previous tutorial](https://jeremysee2.github.io/2021/03/31/tutorial-3-ua
 * Full and Empty flags
 * Overflow and underflow flags
 
+We start by defining the ports to our module.
+
+```verilog
+module fifo_memory (
+    input i_Clock,
+    input i_Reset,
+    input i_Write_En,
+    input i_Read_En,
+    input  [c_WIDTH:0] i_Data_In,
+    output [c_WIDTH:0] o_Data_Out,
+    output reg fifo_full,
+    output reg fifo_empty,
+    output reg fifo_overflow,
+    output reg fifo_underflow
+    );
+endmodule
+```
+
+Then, we define the internal signals we use to store and access the memory.
+
+```verilog
+    // Internal memory, 7 16-bit wide registers
+    parameter c_DEPTH = 7;
+    parameter c_WIDTH = 15;
+    reg [c_WIDTH:0] memory [0:c_DEPTH];
+    reg [c_DEPTH:0]  wraddr = 0;
+    reg [c_DEPTH:0]  rdaddr = 0;
+    reg [c_WIDTH:0] r_Data_Out;
+```
+
+After, we add in a reset block to initialise our outputs and internal signals.
+
+```verilog
+    // Reset block
+    always @(posedge i_Clock, negedge i_Reset) begin
+        if (!i_Reset) begin
+            // Reset output flags
+            {fifo_full, 
+             fifo_empty,
+             fifo_overflow,
+             fifo_underflow} <= 4'b0000;
+            
+            // Reset internal signals
+            wraddr <= 0;
+            rdaddr <= 0;
+            r_Data_Out <= 0;
+        end
+    end
+```
+
+Then, we define logic for reading from and writing to the internal memory of the FIFO buffer, sequentially.
+
+```verilog
+    // Writing to FIFO
+    always @(posedge i_Clock) begin
+        if (i_Write_En) begin
+            memory[wraddr] <= i_Data_In;
+
+            // Incrementing wraddr pointer
+            if ((!fifo_full) || (i_Read_En)) begin
+                wraddr <= wraddr + 1'b1;
+                fifo_overflow <= 1'b0;
+            end
+            else
+                fifo_overflow <= 1'b1;
+        end
+    end
+
+    // Reading from FIFO
+    always @(posedge i_Clock) begin
+        if (i_Read_En) begin
+            r_Data_Out <= memory[rdaddr];
+
+            // Incrementing raddr pointer
+            if (!fifo_empty) begin
+                rdaddr <= rdaddr + 1'b1;
+                fifo_underflow <= 1'b0;
+            end
+            else
+                fifo_underflow <= 1'b1;
+        end
+    end
+
+    assign o_Data_Out = r_Data_Out;
+```
+
+Next, we want to manage the `fifo-full` and `fifo-empty` flags that we use to guide read and write operations. This section is referenced from [zipcpu](https://zipcpu.com/blog/2017/07/29/fifo.html), as it provides an efficient way to set read and write flags in one clock cycle.
+
+```verilog
+
+    // Calculating full/empty flags, referenced from zipcpu.com
+    wire	[c_DEPTH:0]	dblnext, nxtread;
+    assign	dblnext = wraddr + 2;
+    assign	nxtread = rdaddr + 1'b1;
+
+    always @(posedge i_Clock)
+        if (!i_Reset)
+        begin
+            fifo_full <= 1'b0;
+            fifo_empty <= 1'b1;
+        end else casez({ i_Write_En, i_Read_En, !fifo_full, !fifo_empty })
+        4'b01?1: begin	// A successful read
+            fifo_full  <= 1'b0;
+            fifo_empty <= (nxtread == wraddr);
+        end
+        4'b101?: begin	// A successful write
+            fifo_full <= (dblnext == rdaddr);
+            fifo_empty <= 1'b0;
+        end
+        4'b11?0: begin	// Successful write, failed read
+            fifo_full  <= 1'b0;
+            fifo_empty <= 1'b0;
+        end
+        4'b11?1: begin	// Successful read and write
+            fifo_full  <= fifo_full;
+            fifo_empty <= 1'b0;
+        end
+        default: begin end
+        endcase
+```
+
+Lastly, we bring it all together for the final file `fifo_memory.v`.
+
 ```verilog
 module fifo_memory (
     input i_Clock,
@@ -118,7 +241,13 @@ module fifo_memory (
 endmodule
 ```
 
-Let's write a testbench to validate the output signals of our module.
+Let's write a testbench to validate the output signals of our module. By now you should be familiar with the general structure of a testbench.
+
+1. Describe test signals
+2. Instantiate unit under test (can be multiple of them)
+3. Put testbench logic under `initial` block to run once. Use `always` block for repeating logic
+4. Use `if` statements to validate outputs and print outputs using `$display()`
+5. Save output waveform using `$dumpfile()` and `$dumpvars()`
 
 ```verilog
 `timescale 1ns/1ns
@@ -229,9 +358,17 @@ module fifo_memory_tb ();
 endmodule
 ```
 
+Running the simulation in `iverilog` and viewing in `gtkwave` gives the following result.
+
+![](/uploads/fifo-gtkwave.PNG)
+
 Congratulations! You've defined your first FIFO buffer. In practice, FIFO buffers are very useful for the following situations.
 
 * Crossing clock domains
 * Buffering high speed, infrequent data
 * Aligning data for math operations
 * Buffering data coming from software, to be sent out of the chip
+
+Now, let's use this for our UART peripheral we designed in [Tutorial 3](https://jeremysee2.github.io/2021/03/31/tutorial-3-uart-inteface/)!
+
+#### Complete UART Transceiver
