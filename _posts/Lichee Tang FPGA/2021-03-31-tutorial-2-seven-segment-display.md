@@ -615,4 +615,4 @@ set_pin_assignment	{ clk }	{ LOCATION = K14; }
 ## Seven Segment, 7 pins, common anode configuration
 ```
 
-Congratulations! You've successfully created your first visual interface using an FPGA!
+Congratulations! You've successfully created your first visual interface using an FPGA! [Click here for the next tutorial on the UART interface](https://jeremysee2.github.io/2021/03/31/tutorial-3-uart-inteface/).
