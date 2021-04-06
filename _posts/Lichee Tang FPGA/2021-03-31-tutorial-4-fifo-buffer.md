@@ -378,3 +378,98 @@ Let's draw up a block diagram of what our UART transceiver should look like.
 ![](/uploads/uart-bd.png)
 
 We'll connect the RX, TX and FIFO modules that we've already created in this fashion. For some simple processing, we'll include a module that converts lower case characters to upper case characters, using a simple arithmetic operation (`-32` to convert from lower to upper case).
+
+Let's start by designing the missing module to convert from lower to upper case. Hopefully, you've gotten the hang of Verilog from previous tutorials and are able to understand what this does!
+
+```verilog
+module lower_to_upper (
+    input i_Clock,
+    input i_Reset,
+    input i_Data_Empty,
+    input [7:0] i_data,
+    output [7:0] o_data,
+    output o_write_enable,
+    output reg o_read_enable
+    );
+
+    // Internal data register
+    reg [7:0] r_data;
+
+    // Reset block
+    always @(posedge i_Clock, negedge i_Reset) begin
+        if (!i_Reset) begin
+            r_data <= 8'b0;
+        end
+    end
+
+    // Check if FIFO has data to write to this module
+    assign o_write_enable = ~i_Data_Empty;
+
+    // Main block
+    always @(posedge i_Clock) begin
+        if (o_write_enable) begin
+            r_data = i_data - 8'h20;
+            o_read_enable = 1'b1;
+        end
+        else
+            o_read_enable = 1'b0;
+    end
+    assign o_data = r_data;
+    
+endmodule
+```
+
+Let's write a simple testbench for this module.
+
+```verilog
+`timescale 1ps/1ps
+`include "lower_to_upper.v"
+
+module lower_to_upper_tb ();
+
+    reg r_Clock = 0;
+    reg r_Reset = 1;
+    reg r_Data_Empty = 1;
+    reg [7:0] r_data = 8'b0;
+    wire [7:0] w_data_out;
+    wire w_write_enable;
+    wire w_read_enable;
+
+    parameter c_CLOCK_PERIOD_NS = 10;
+    
+    lower_to_upper UUT (
+        .i_Clock(r_Clock),
+        .i_Reset(r_Reset),
+        .i_Data_Empty(r_Data_Empty),
+        .i_data(r_data),
+        .o_data(w_data_out),
+        .o_write_enable(w_write_enable),
+        .o_read_enable(w_read_enable)
+    );
+
+    always #(c_CLOCK_PERIOD_NS/2) r_Clock <= !r_Clock;
+
+    initial begin
+        r_Data_Empty <= 0;
+        r_data <= 8'h61;
+        #(c_CLOCK_PERIOD_NS)
+
+        if (w_data_out == 8'h41)
+            $display("Test passed");
+        else
+            $display("Test failed, 0x%0h",w_data_out);
+        
+        
+        $finish();
+
+    end
+
+endmodule
+```
+
+Next, let's combine everything together in a top-level module.
+
+```verilog
+```
+
+s
