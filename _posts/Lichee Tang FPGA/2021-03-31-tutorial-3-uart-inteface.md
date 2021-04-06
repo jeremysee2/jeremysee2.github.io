@@ -435,7 +435,7 @@ Congratulations! We've successfully followed [nandland's tutorial](https://www.y
 
 #### UART Transmitter
 
-For the UART transmitter, it's quite similar to the `task` from the UART receiver testbench.
+For the UART transmitter, it's quite similar to the `task` from the UART receiver testbench. The variable names are also similar to the UART receiver module.
 
 ```verilog
 //////////////////////////////////////////////////////////////////////
