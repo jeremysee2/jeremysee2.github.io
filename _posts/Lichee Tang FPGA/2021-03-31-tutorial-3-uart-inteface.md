@@ -109,9 +109,14 @@ module UART_RX
   
   
   // Purpose: Control RX state machine
-  always @(posedge i_Clock)
+  always @(posedge i_Clock, negedge i_Reset)
   begin
-      
+    if (~i_Reset) begin
+      o_RX_Data_Valid   <= 1'b0;
+      r_Clock_Count     <= 0;
+      r_Bit_Index       <= 0;
+      r_SM_Main <= IDLE;
+    end
     case (r_SM_Main)
       IDLE :
         begin
@@ -258,6 +263,7 @@ module UART_RX_tb();
   parameter c_BIT_PERIOD      = 8600;
   
   reg r_Clock = 0;
+  reg r_Reset = 1;
   reg r_RX_Serial = 1;
   wire [7:0] w_RX_Byte;
   
@@ -297,6 +303,7 @@ Next, let's initialise our unit under test (UUT), and create our simulation cloc
 ```verilog
   UART_RX #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
     (.i_Clock(r_Clock),
+     .i_Reset(r_Reset),
      .i_RX_Serial(r_RX_Serial),
      .o_RX_Data_Valid(),
      .o_RX_Byte(w_RX_Byte)
@@ -355,6 +362,7 @@ module UART_RX_tb();
   parameter c_BIT_PERIOD      = 8600;
   
   reg r_Clock = 0;
+  reg r_Reset = 1;
   reg r_RX_Serial = 1;
   wire [7:0] w_RX_Byte;
   
@@ -386,6 +394,7 @@ module UART_RX_tb();
   
   UART_RX #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
     (.i_Clock(r_Clock),
+     .i_Reset(r_Reset),
      .i_RX_Serial(r_RX_Serial),
      .o_RX_Data_Valid(),
      .o_RX_Byte(w_RX_Byte)
@@ -422,3 +431,7 @@ endmodule
 ```
 
 Congratulations! We've successfully followed [nandland's tutorial](https://www.youtube.com/watch?v=Vh0KdoXaVgU&t=1172s) on building a UART receiver. Now, let's move on to building the UART transmitter.
+
+#### UART Transmitter
+
+For the UART transmitter,
