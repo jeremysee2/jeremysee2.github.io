@@ -435,7 +435,38 @@ Congratulations! We've successfully followed [nandland's tutorial](https://www.y
 
 #### UART Transmitter
 
-For the UART transmitter, it's quite similar to the `task` from the UART receiver testbench. The variable names are also similar to the UART receiver module.
+For the UART transmitter, it's quite similar to the `task` from the UART receiver testbench. The variable names are also similar to the UART receiver module. We define an additional signal, `r-TX-Active` to indicate when the transmitter is active. This allows you to handle half-duplex applications where you transmit and receive on the same line.
+
+```verilog
+module UART_TX 
+  #(parameter CLKS_PER_BIT = 208)
+  (
+   input       i_Clock,
+   input       i_Reset,
+   input       i_TX_DV,
+   input [7:0] i_TX_Byte, 
+   output      o_TX_Active,
+   output reg  o_TX_Serial,
+   output      o_TX_Done
+   );
+ 
+  parameter IDLE         = 3'b000;
+  parameter TX_START_BIT = 3'b001;
+  parameter TX_DATA_BITS = 3'b010;
+  parameter TX_STOP_BIT  = 3'b011;
+  parameter CLEANUP      = 3'b100;
+  
+  reg [2:0] r_SM_Main     = 0;
+  reg [7:0] r_Clock_Count = 0;
+  reg [2:0] r_Bit_Index   = 0;
+  reg [7:0] r_TX_Data     = 0;
+  reg       r_TX_Done     = 0;
+  reg       r_TX_Active   = 0;
+
+endmodule
+```
+
+s
 
 ```verilog
 //////////////////////////////////////////////////////////////////////
