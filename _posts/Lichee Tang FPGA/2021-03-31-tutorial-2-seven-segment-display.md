@@ -1,8 +1,10 @@
 ---
 layout: post
 title: 'Tutorial 2: Seven segment display'
-menus: ''
-date: 2021-03-31 16:00:00 +0000
+date: 2021-03-31T16:00:00.000+00:00
+menu:
+  '':
+    weight: 1
 
 ---
 ### Tutorial 2: Seven Segment Display
