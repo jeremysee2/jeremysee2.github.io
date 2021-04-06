@@ -375,4 +375,6 @@ Now, let's use this for our UART peripheral we designed in [Tutorial 3](https://
 
 Let's draw up a block diagram of what our UART transceiver should look like.
 
-We'll connect
+![](/uploads/uart-bd.png)
+
+We'll connect the RX, TX and FIFO modules that we've already created in this fashion. For some simple processing, we'll include a module that converts lower case characters to upper case characters, using a simple arithmetic operation (`-32` to convert from lower to upper case).
