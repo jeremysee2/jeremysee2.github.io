@@ -829,3 +829,7 @@ endmodule
 ```
 
 Finally, we've implemented a basic UART peripheral! You'll note that this only allows you to receive one byte at a time, and has no buffer to store the last few bytes. This means that whatever you send will push old data out of the system, which usually isn't desirable when you don't know when the next data byte will come - fast or slow.
+
+#### FIFO Buffer
+
+To solve that problem, let's implement a First In First Out (FIFO) buffer to hold the previous two values in data registers.
