@@ -374,3 +374,5 @@ Now, let's use this for our UART peripheral we designed in [Tutorial 3](https://
 #### Complete UART Transceiver
 
 Let's draw up a block diagram of what our UART transceiver should look like.
+
+We'll connect
