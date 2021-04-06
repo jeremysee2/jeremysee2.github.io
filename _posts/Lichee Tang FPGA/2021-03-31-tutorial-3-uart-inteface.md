@@ -27,7 +27,7 @@ For a detailed explanation of UART, watch [this video by nandland](https://www.y
 
 We use a state machine to perform a sequence of actions to wait for data, look for the start bit, look for data bits, look for the stop bit and clean up the state machine by going back to the `IDLE` state. For our `UART_RX` module, we'll define a `clk` input and a `RXserial` input, a `datavalid` output and a `RXbyte` bus output.
 
-We'll also add in the states for our state machine, so we can reference them intuitively instead of relying on values like `3`b001`. We define internal signals as well.
+We'll also add in the states for our state machine, so we can reference them intuitively instead of relying on values like `3`b001\`. We define internal signals as well.
 
 `rClockCount` divides the clock so we only read the data in once, to avoid re-sampling the same data. `rBitIndex` keeps track of which data bit we are currently at, while `rRXByte` keeps track of the actual data. `oRXDataValid`is an output that we use to signal whether the data received is in the correct format, and will be useful for downstream modules that take in data from this UART module. `rSMMain` is the main variable that stores our states for this state machine.
 
@@ -58,9 +58,9 @@ module UART_RX (
 endmodule
 ```
 
-Now, let's add in the logic for the state machine itself. The entire state machine is nested within an `always` block, sensitive to `posedge i_Clk`. 
+Now, let's add in the logic for the state machine itself. The entire state machine is nested within an `always` block, sensitive to `posedge i_Clk`.
 
-The `IDLE` state resets internal signals, and looks for the start bit of `1`b0`. If it's detected, it goes to the next state.
+The `IDLE` state resets internal signals, and looks for the start bit of `1`b0\`. If it's detected, it goes to the next state.
 
 `RX-START-BIT` uses the internal clock counter to divide the 24MHz clock to 115200, matching the baud rate of the UART line. It uses that to double-check that the start bit has been set, then sets the `RX-DATA-BITS` state. Else, it goes back to the `IDLE` state.
 
@@ -214,6 +214,127 @@ endmodule // UART_RX
 
 Now, let's write the testbench to ensure that our state machine is able to read and output data correctly.
 
+We start with the `timescale 1ns/10ps`, that defines the timestep to be 1ns, and the minimum resolution to be 10ps. Then, we include our module to be tested `include "UART_RX.v"`.
+
+```verilog
+`timescale 1ns/10ps
+`include "UART_RX.v"
+
+module UART_RX_tb();
+endmodule
+```
+
+Then, we define some clocking parameters to simulate the actual clock. These calculations are very rough, but will be good enough to provide behavioural simulation analysis.
+
+```verilog
+`timescale 1ns/10ps
+`include "UART_RX.v"
+
+module UART_RX_tb();
+
+  // Testbench uses a 24 MHz clock (same as Lichee Tang board)
+  // Want to interface to 115200 baud UART
+  // 24000000 / 115200 = 208 Clocks Per Bit.
+  parameter c_CLOCK_PERIOD_NS = 41;
+  parameter c_CLKS_PER_BIT    = 208;
+  parameter c_BIT_PERIOD      = 8600;
+  
+endmodule
+```
+
+Next, we define test signals to send to our top level module.
+
+```verilog
+`timescale 1ns/10ps
+`include "UART_RX.v"
+
+module UART_RX_tb();
+
+  // Testbench uses a 24 MHz clock (same as Lichee Tang board)
+  // Want to interface to 115200 baud UART
+  // 24000000 / 115200 = 208 Clocks Per Bit.
+  parameter c_CLOCK_PERIOD_NS = 41;
+  parameter c_CLKS_PER_BIT    = 208;
+  parameter c_BIT_PERIOD      = 8600;
+  
+  reg r_Clock = 0;
+  reg r_RX_Serial = 1;
+  wire [7:0] w_RX_Byte;
+  
+endomdule
+```
+
+Next, we set up a code block that generates the test signal we want to send to our module. This introduces the `task` and `endtask` keyword. Think of it as a more general function, that takes in multiple inputs and sends out multiple outputs, with specific timing. In this case, it takes in our parallel test data `0x37` and serializes it for the UART receiver test. It sends the start bit, 8 data bits and stop bit with appropriate timings.
+
+```verilog
+  // Takes in input byte and serializes it 
+  task UART_WRITE_BYTE;
+    input [7:0] i_Data;
+    integer     ii;
+    begin
+      
+      // Send Start Bit
+      r_RX_Serial <= 1'b0;
+      #(c_BIT_PERIOD);
+      #1000;
+      
+      // Send Data Byte
+      for (ii=0; ii<8; ii=ii+1)
+        begin
+          r_RX_Serial <= i_Data[ii];
+          #(c_BIT_PERIOD);
+        end
+      
+      // Send Stop Bit
+      r_RX_Serial <= 1'b1;
+      #(c_BIT_PERIOD);
+     end
+  endtask // UART_WRITE_BYTE
+```
+
+Next, let's initialise our unit under test (UUT), and create our simulation clock.
+
+```verilog
+  UART_RX #(.CLKS_PER_BIT(c_CLKS_PER_BIT)) UART_RX_INST
+    (.i_Clock(r_Clock),
+     .i_RX_Serial(r_RX_Serial),
+     .o_RX_Data_Valid(),
+     .o_RX_Byte(w_RX_Byte)
+     );
+  
+  always
+    #(c_CLOCK_PERIOD_NS/2) r_Clock <= !r_Clock;
+```
+
+Lastly, we'll add in the initial block to pipe signals from our `task` to our UUT, and save all signals to an output waveform for viewing.
+
+```verilog
+  // Main Testing:
+  initial
+    begin
+      // Send a command to the UART (exercise Rx)
+      @(posedge r_Clock);
+      UART_WRITE_BYTE(8'h37);
+      @(posedge r_Clock);
+            
+      // Check that the correct command was received
+      if (w_RX_Byte == 8'h37)
+        $display("Test Passed - Correct Byte Received");
+      else
+        $display("Test Failed - Incorrect Byte Received");
+    $finish();
+    end
+  
+  initial 
+  begin
+    // Required to dump signals to EPWave
+    $dumpfile("dump.vcd");
+    $dumpvars(0);
+  end
+```
+
+Bringing it all together, here's the final `testbench` Verilog file.
+
 ```verilog
 //////////////////////////////////////////////////////////////////////
 // File Downloaded from http://www.nandland.com
@@ -292,7 +413,7 @@ module UART_RX_tb();
   
   initial 
   begin
-    // Required to dump signals to EPWave
+    // Required to dump signals
     $dumpfile("dump.vcd");
     $dumpvars(0);
   end
@@ -300,4 +421,4 @@ module UART_RX_tb();
 endmodule
 ```
 
-s
+Congratulations! We've successfully followed [nandland's tutorial](https://www.youtube.com/watch?v=Vh0KdoXaVgU&t=1172s) on building a UART receiver. Now, let's move on to building the UART transmitter.
