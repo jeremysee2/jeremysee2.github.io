@@ -466,7 +466,7 @@ module UART_TX
 endmodule
 ```
 
-s
+Next, we define the behaviour of the module.
 
 ```verilog
 //////////////////////////////////////////////////////////////////////
