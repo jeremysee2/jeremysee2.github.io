@@ -718,4 +718,4 @@ Following the steps in Tutorial 1, we set up the environment and generate the bi
       #treg                 0
     #pll                    0   out of      4    0.00%
 
-Congratulations! You've implemented the beginnings of a small computer! For a graphical interface to the FPGA, check out the next tutorial on building a VGA output.
+Congratulations! You've implemented the beginnings of a small computer! For a graphical interface to the FPGA, check out the [next tutorial](https://jeremysee2.github.io/2021/04/01/tutorial-5-vga-display-output/) on building a VGA output.
