@@ -2,6 +2,7 @@
 layout: page
 title: Carell Technologes - my startup
 date: 2019-10-20
+
 ---
 ## Carell Technologies: My wearables startup
 
@@ -9,7 +10,7 @@ Before starting my undergraduate degree, I co-founded a wearables startup. My te
 
 ![](/uploads/product-breakdown.gif "Carell Smart Band stackup")
 
-Carell Smart Band was a device meant to monitor the temperature of a child and detect when an abnormal spike (representing fever) may occur. This allows parents to go to sleep with peace of mind, knowing that they would be alerted if anything went awry. The product was launched on [Indiegogo](https://www.indiegogo.com/projects/world-s-most-comfortable-child-monitor-by-carell#/), but did not meet its funding goal, and my team and I had no choice but to scrap the project. Nevertheless, we all took away something from this experience. My contribution was the electronics, firmware, and mobile application for the product.
+Carell Smart Band was a device meant to monitor the temperature of a child and detect when an abnormal spike (representing fever) may occur. This allows parents to go to sleep with peace of mind, knowing that they would be alerted if anything went awry. The product was launched on [Indiegogo](https://www.indiegogo.com/projects/world-s-most-comfortable-child-monitor-by-carell#/) in September 2019. My contribution was the electronics, firmware, and mobile application for the product.
 
 ### Electronics Design
 
