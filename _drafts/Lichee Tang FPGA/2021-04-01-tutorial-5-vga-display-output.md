@@ -18,7 +18,7 @@ VGA is an older display interface based on analog inputs of Red, Green and Blue 
 
 From this, we know that we need to manage the VSYNC and HSYNC signals to control when we output RGB pixel data. Let's start by creating a module that generates the appropriate VSYNC and HSYNC signals, given a certain fixed resolution. Create the following file `VGA_Sync_Pulses`.
 
-```v
+```verilog
 // This module is designed for 640x480 with a 25 MHz input clock.
 
 module VGA_Sync_Pulses 
@@ -59,7 +59,7 @@ The `always` block keeps track of the current pixel being described by the entir
 
 Next, let's feed these signals into a test pattern generator (from [Nandland](https://www.youtube.com/watch?v=7wjTJivsNMM)). This module takes in the HSYNC and VSYNC signals and a pattern selector to generate the appropriate HSYNC, VSYNC and RGB signals.
 
-```v
+```verilog
 // This module is designed for 640x480 with a 25 MHz input clock.
 // All test patterns are being generated all the time.  This makes use of one
 // of the benefits of FPGAs, they are highly parallelizable.  Many different
@@ -277,7 +277,7 @@ module Test_Pattern_Gen
 endmodule
 ```
 
-```v
+```verilog
 // This module will take incoming horizontal and veritcal sync pulses and
 // create Row and Column counters based on these syncs.
 // It will align the Row/Col counters to the output Sync pulses.
@@ -343,7 +343,7 @@ The test pattern generator chooses from a preset list of output patterns to driv
 
 Lastly, we add the `VGA_Sync_Porch` module to add the inactive area to the output from the test pattern generator. Effectively, this modifies the HSYNC and VSYNC signals when in the inactive area to include the front porch and back porch, where they should be driven high.
 
-```v
+```verilog
 // The purpose of this module is to modify the input HSync and VSync signals to
 // include some time for what is called the Front and Back porch.  The front
 // and back porch of a VGA interface used to have more meaning when a monitor
@@ -435,7 +435,7 @@ endmodule
 
 Lastly, we combine all of the above modules into a top level file called `vga_top.v`.
 
-```v
+```verilog
 module vga_top
 #(
 	parameter c_TOTAL_COLS 			= 800,
@@ -531,4 +531,4 @@ In this module, we set the resolution parameters for the modules and use the def
 
 In my case, I use the [VGA PS2 board from Waveshare](https://github.com/jeremysee2/Lichee-Tang-Tutorial/raw/master/tutorial-5/VGA-PS2-Board-Schematic.pdf), which uses an R2R DAC to generate 3-bit RGB colour. 3V3 logic levels on the FPGA result in a maximum 0.7V analog voltage to the VGA connector, the maximum value for each colour.
 
-With this, congratulations! You've made your first video output with VGA and are on track to do great things with FPGAs! By now you should be sufficiently well versed in Verilog and are able to understand how FPGA code is designed and executed. I recommend trying out [Nandland's Pong walkthrough](https://www.youtube.com/watch?v=sFgNpK4yQwQ) or running the [PicoRV32 core on this FPGA](https://github.com/nekomona/picorv32-tang) as a stretcher exercise. The possibilities are endless!
+With this, congratulations! You've made your first video output with VGA and are on track to do great things with FPGAs! By now you should be sufficiently well versed in Verilog and are able to understand how HDL code is designed and executed. I recommend trying out [Nandland's Pong walkthrough](https://www.youtube.com/watch?v=sFgNpK4yQwQ) or running the [PicoRV32 core on this FPGA](https://github.com/nekomona/picorv32-tang) as a stretcher exercise. The possibilities are endless!
