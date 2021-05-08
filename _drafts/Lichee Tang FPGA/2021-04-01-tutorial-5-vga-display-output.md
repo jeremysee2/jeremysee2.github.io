@@ -527,6 +527,8 @@ module vga_top
 endmodule
 ```
 
-In this module, we set the resolution parameters for the modules and use the defaults for the front porch, back porch and sync pulse in the inactive area. Then, we define the wires connecting the modules together, and to external components such as the onboard 24 MHz clock, the reset button (active low) and the VGA connector.
+In this module, we set the resolution parameters for the modules and use the defaults for the front porch, back porch and sync pulse in the inactive area. Then, we define the wires connecting the modules together, and to external components such as the onboard 24 MHz clock, the reset button (active low) and the VGA connector. The 24 MHz clock isn't optimal as a 25.175MHz clock is specified. However, it's good enough for our learning purposes. Optionally, you can use the PLL IP module to generate the correct clock, but it varies from vendor to vendor and its code isn't transferrable across vendors.
 
-In my case, I use the VGA PS2 board from Waveshare, which uses a R2R DAC to generate 3-bit RGB colour. 3V3 logic levels on the FPGA result in a maximum 0.7V analog voltage to the VGA connector, the maximum value for each colour.
+In my case, I use the [VGA PS2 board from Waveshare](https://github.com/jeremysee2/Lichee-Tang-Tutorial/raw/master/tutorial-5/VGA-PS2-Board-Schematic.pdf), which uses an R2R DAC to generate 3-bit RGB colour. 3V3 logic levels on the FPGA result in a maximum 0.7V analog voltage to the VGA connector, the maximum value for each colour.
+
+With this, congratulations! You've made your first video output with VGA and are on track to do great things with FPGAs! By now you should be sufficiently well versed in Verilog and are able to understand how FPGA code is designed and executed. I recommend trying out [Nandland's Pong walkthrough](https://www.youtube.com/watch?v=sFgNpK4yQwQ) or running the [PicoRV32 core on this FPGA](https://github.com/nekomona/picorv32-tang) as a stretcher exercise. The possibilities are endless!
