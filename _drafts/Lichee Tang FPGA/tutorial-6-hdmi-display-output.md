@@ -62,11 +62,38 @@ case (D3, D2, D1, D0):
 endcase;
 ```
 
+##### Pixel Data Encoding
+
+To reduce the number of transitions in the data byte, TMDS uses `XOR` or `XNOR` encoding. Each bit is the XOR/XNOR of itself with the encoded version of the previous bit.
+
+* Fewer than 4 ones, use `XOR`
+* More than 4 ones, use `XNOR`
+* Exactly 4 ones, start with 1 use `XOR`, start with 0 use `XNOR`
+
 #### Verilog Implementation
 
 This code is derived from [fpga4fun's post](https://www.fpga4fun.com/HDMI.html) on HDMI.
 
-We start by implementing the TMDS encoder for DVI, as mentioned above.
+We start by implementing the TMDS encoder for DVI, as mentioned above. To start off, we define the inputs/outputs to the module.
+
+```verilog
+module TMDS_encoder(
+	input clk,
+	input [7:0] VD,  // video data (red, green or blue)
+	input [1:0] CD,  // control data
+	input VDE,  // video data enable, to choose between CD (when VDE=0) and VD (when VDE=1)
+	output reg [9:0] TMDS = 0
+    );
+endmodule
+```
+
+Next, we implement `XNOR` encoding the reduce the number of transitions in the data byte. There is also `XOR` encoding
+
+```verilog
+s
+```
+
+Then,
 
 ```verilog
 module TMDS_encoder(
