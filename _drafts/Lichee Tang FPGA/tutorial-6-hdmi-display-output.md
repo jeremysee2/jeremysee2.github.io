@@ -70,7 +70,13 @@ To reduce the number of transitions in the data byte, TMDS uses `XOR` or `XNOR` 
 * More than 4 ones, use `XNOR`
 * Exactly 4 ones, start with 1 use `XOR`, start with 0 use `XNOR`
 
-#### Verilog Implementation
+Add a 9th bit to describe the encoding method used, "1" for `XOR` and "0" for `XNOR`. This is likely [the reason](https://docs.google.com/document/d/1v7AJK4cVG3uDJo_rn0X9vxMvBwXKBSL1VaJgiXgFo5A) why a pixel clock is provided in DVI/HDMI, as opposed to VGA where the clock is recovered from the video data.
+
+##### Maintaining DC Bias
+
+The output of this encoding doesn't guarantee an even number of ones and zeros, to create a net amplitude of zero. TMDS may invert a symbol and adds another bit to determine if the 10-bit symbol was inverted. This consists of the 8-bit data and 1-bit encoding, 1-bit inverted symbol.
+
+### Verilog Implementation
 
 This code is derived from [fpga4fun's post](https://www.fpga4fun.com/HDMI.html) on HDMI.
 
