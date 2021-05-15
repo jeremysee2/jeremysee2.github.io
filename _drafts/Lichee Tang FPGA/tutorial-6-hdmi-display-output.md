@@ -143,13 +143,38 @@ module TMDS_encoder(
 endmodule
 ```
 
-Next, we implement a simple top-level module with a test pattern generator. In this case, we use a 25MHz clock for the TMDS clock, and a 250MHz clock for the 10-bit data. To generate this clock frequency, we use a Phase Locked Loop (PLL) IP generator. This allows us to use the PLL peripheral in the FPGA, which varies from vendor to vendor.
+Next, we implement a simple top-level module with a test pattern generator. In this case, we use a 25MHz clock for the TMDS clock, and a 250MHz clock for the 10-bit data. To generate this clock frequency, we use a Phase Locked Loop (PLL) IP block. This allows us to use the PLL peripheral in the FPGA, which varies from vendor to vendor. Using the Tang Dynasty IDE, we can use the Tools > IP generator.
+
+![](/uploads/ip-generator.PNG)
+
+Select "Create a new IP core".
+
+![](/uploads/ip-generator-2.PNG)
+
+Name your module, and make sure the correct device is selected for the Tang.
+
+![](/uploads/ip-generator-3.PNG)
+
+Select the Phase Locked Loop (PLL) function.
+
+![](/uploads/ip-generator-4.PNG)
+
+Key in the input frequency of the external oscillator on the Tang, 24MHz.
+
+![](/uploads/ip-generator-5.PNG)
+
+Then, choose your desired output frequencies. For simplicity, we choose 252MHz and 25.2MHz, which is close enough to our desired frequencies of 25MHz pixel clock and 250MHz data frequency. We instantiate the PLL module as follows:
 
 ```verilog
-
+    pllhdmi pllInstance(.refclk(clk),
+                    .reset(~rst),
+                    .stdby(),
+                    .extlock(),
+                    .clk0_out(clk_TMDS),
+                    .clk1_out(pixclk));
 ```
 
-Below is the full `HDMI_test` top level module.
+Below is the full `HDMI_test` top level module. This includes a simple test pattern generator from [fpga4fun](https://www.fpga4fun.com/HDMI.html).
 
 ```verilog
 module HDMI_test(
@@ -184,7 +209,7 @@ module HDMI_test(
     always @(posedge pixclk) hSync <= (CounterX>=656) && (CounterX<752);
     always @(posedge pixclk) vSync <= (CounterY>=490) && (CounterY<492);
 
-    ////////////////
+    ////////////////////////////////////////////////////////////////////////
     wire [7:0] W = {8{CounterX[7:0]==CounterY[7:0]}};
     wire [7:0] A = {8{CounterX[7:5]==3'h2 && CounterY[7:5]==3'h2}};
     reg [7:0] red, green, blue;
